@@ -81,6 +81,7 @@
       <artifactId>mycore-mets</artifactId>
     </dependency>
 
+    <!-- axis dependencies -->
     <dependency>
       <groupId>org.apache.axis</groupId>
       <artifactId>axis</artifactId>
@@ -101,7 +102,6 @@
       <artifactId>xml-apis</artifactId>
       <version>1.0.b2</version>
     </dependency>
-
     <dependency>
       <groupId>commons-discovery</groupId>
       <artifactId>commons-discovery</artifactId>
@@ -111,8 +111,15 @@
       <groupId>wsdl4j</groupId>
       <artifactId>wsdl4j</artifactId>
       <version>1.6.3</version>
-      <scope>runtime</scope>
     </dependency>
+
+    <!-- JSON -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20190722</version>
+    </dependency>
+
 
 
 
