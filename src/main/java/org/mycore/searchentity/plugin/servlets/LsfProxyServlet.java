@@ -3,8 +3,8 @@ package org.mycore.searchentity.plugin.servlets;
 import org.mycore.common.MCRException;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.searchentity.plugin.soap.SOAPSearch;
-import org.mycore.searchentity.plugin.soap.SOAPSearchServiceLocator;
+import org.mycore.searchentity.plugin.soap.client.SOAPSearch;
+import org.mycore.searchentity.plugin.soap.client.SOAPSearchServiceLocator;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

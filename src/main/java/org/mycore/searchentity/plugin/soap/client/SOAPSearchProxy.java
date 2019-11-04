@@ -1,8 +1,8 @@
-package org.mycore.searchentity.plugin.soap;
+package org.mycore.searchentity.plugin.soap.client;
 
-public class SOAPSearchProxy implements org.mycore.searchentity.plugin.soap.SOAPSearch {
+public class SOAPSearchProxy implements org.mycore.searchentity.plugin.soap.client.SOAPSearch {
   private String _endpoint = null;
-  private org.mycore.searchentity.plugin.soap.SOAPSearch sOAPSearch = null;
+  private org.mycore.searchentity.plugin.soap.client.SOAPSearch sOAPSearch = null;
   
   public SOAPSearchProxy() {
     _initSOAPSearchProxy();
@@ -15,7 +15,7 @@ public class SOAPSearchProxy implements org.mycore.searchentity.plugin.soap.SOAP
   
   private void _initSOAPSearchProxy() {
     try {
-      sOAPSearch = (new org.mycore.searchentity.plugin.soap.SOAPSearchServiceLocator()).getsoapsearch();
+      sOAPSearch = (new org.mycore.searchentity.plugin.soap.client.SOAPSearchServiceLocator()).getsoapsearch();
       if (sOAPSearch != null) {
         if (_endpoint != null)
           ((javax.xml.rpc.Stub)sOAPSearch)._setProperty("javax.xml.rpc.service.endpoint.address", _endpoint);
@@ -38,16 +38,10 @@ public class SOAPSearchProxy implements org.mycore.searchentity.plugin.soap.SOAP
     
   }
   
-  public org.mycore.searchentity.plugin.soap.SOAPSearch getSOAPSearch() {
+  public org.mycore.searchentity.plugin.soap.client.SOAPSearch getSOAPSearch() {
     if (sOAPSearch == null)
       _initSOAPSearchProxy();
     return sOAPSearch;
-  }
-  
-  public java.lang.String search(java.lang.String searchXML) throws java.rmi.RemoteException{
-    if (sOAPSearch == null)
-      _initSOAPSearchProxy();
-    return sOAPSearch.search(searchXML);
   }
   
   public java.lang.String getForm(java.lang.String searchXML) throws java.rmi.RemoteException{
@@ -60,6 +54,12 @@ public class SOAPSearchProxy implements org.mycore.searchentity.plugin.soap.SOAP
     if (sOAPSearch == null)
       _initSOAPSearchProxy();
     return sOAPSearch.getForm4AuthUser(searchXML);
+  }
+  
+  public java.lang.String search(java.lang.String searchXML) throws java.rmi.RemoteException{
+    if (sOAPSearch == null)
+      _initSOAPSearchProxy();
+    return sOAPSearch.search(searchXML);
   }
   
   

@@ -1,59 +1,59 @@
 /**
- * SOAPSearchServiceLocator.java
+ * DBInterfaceServiceLocator.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package org.mycore.searchentity.plugin.soap;
+package org.mycore.searchentity.plugin.soap.client;
 
-public class SOAPSearchServiceLocator extends org.apache.axis.client.Service implements org.mycore.searchentity.plugin.soap.SOAPSearchService {
+public class DBInterfaceServiceLocator extends org.apache.axis.client.Service implements org.mycore.searchentity.plugin.soap.client.DBInterfaceService {
 
-    public SOAPSearchServiceLocator() {
+    public DBInterfaceServiceLocator() {
     }
 
 
-    public SOAPSearchServiceLocator(org.apache.axis.EngineConfiguration config) {
+    public DBInterfaceServiceLocator(org.apache.axis.EngineConfiguration config) {
         super(config);
     }
 
-    public SOAPSearchServiceLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
+    public DBInterfaceServiceLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
     }
 
-    // Use to get a proxy class for soapsearch
-    private java.lang.String soapsearch_address = "http://www.lsf.uni-due.de/lsf/services/soapsearch";
+    // Use to get a proxy class for dbinterface
+    private java.lang.String dbinterface_address = "https://www.lsf.uni-due.de/lsf/services/dbinterface";
 
-    public java.lang.String getsoapsearchAddress() {
-        return soapsearch_address;
+    public java.lang.String getdbinterfaceAddress() {
+        return dbinterface_address;
     }
 
     // The WSDD service name defaults to the port name.
-    private java.lang.String soapsearchWSDDServiceName = "soapsearch";
+    private java.lang.String dbinterfaceWSDDServiceName = "dbinterface";
 
-    public java.lang.String getsoapsearchWSDDServiceName() {
-        return soapsearchWSDDServiceName;
+    public java.lang.String getdbinterfaceWSDDServiceName() {
+        return dbinterfaceWSDDServiceName;
     }
 
-    public void setsoapsearchWSDDServiceName(java.lang.String name) {
-        soapsearchWSDDServiceName = name;
+    public void setdbinterfaceWSDDServiceName(java.lang.String name) {
+        dbinterfaceWSDDServiceName = name;
     }
 
-    public org.mycore.searchentity.plugin.soap.SOAPSearch getsoapsearch() throws javax.xml.rpc.ServiceException {
+    public org.mycore.searchentity.plugin.soap.client.DBInterface getdbinterface() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
-            endpoint = new java.net.URL(soapsearch_address);
+            endpoint = new java.net.URL(dbinterface_address);
         }
         catch (java.net.MalformedURLException e) {
             throw new javax.xml.rpc.ServiceException(e);
         }
-        return getsoapsearch(endpoint);
+        return getdbinterface(endpoint);
     }
 
-    public org.mycore.searchentity.plugin.soap.SOAPSearch getsoapsearch(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public org.mycore.searchentity.plugin.soap.client.DBInterface getdbinterface(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            org.mycore.searchentity.plugin.soap.SoapsearchSoapBindingStub _stub = new org.mycore.searchentity.plugin.soap.SoapsearchSoapBindingStub(portAddress, this);
-            _stub.setPortName(getsoapsearchWSDDServiceName());
+            org.mycore.searchentity.plugin.soap.client.DbinterfaceSoapBindingStub _stub = new org.mycore.searchentity.plugin.soap.client.DbinterfaceSoapBindingStub(portAddress, this);
+            _stub.setPortName(getdbinterfaceWSDDServiceName());
             return _stub;
         }
         catch (org.apache.axis.AxisFault e) {
@@ -61,8 +61,8 @@ public class SOAPSearchServiceLocator extends org.apache.axis.client.Service imp
         }
     }
 
-    public void setsoapsearchEndpointAddress(java.lang.String address) {
-        soapsearch_address = address;
+    public void setdbinterfaceEndpointAddress(java.lang.String address) {
+        dbinterface_address = address;
     }
 
     /**
@@ -72,9 +72,9 @@ public class SOAPSearchServiceLocator extends org.apache.axis.client.Service imp
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (org.mycore.searchentity.plugin.soap.SOAPSearch.class.isAssignableFrom(serviceEndpointInterface)) {
-                org.mycore.searchentity.plugin.soap.SoapsearchSoapBindingStub _stub = new org.mycore.searchentity.plugin.soap.SoapsearchSoapBindingStub(new java.net.URL(soapsearch_address), this);
-                _stub.setPortName(getsoapsearchWSDDServiceName());
+            if (org.mycore.searchentity.plugin.soap.client.DBInterface.class.isAssignableFrom(serviceEndpointInterface)) {
+                org.mycore.searchentity.plugin.soap.client.DbinterfaceSoapBindingStub _stub = new org.mycore.searchentity.plugin.soap.client.DbinterfaceSoapBindingStub(new java.net.URL(dbinterface_address), this);
+                _stub.setPortName(getdbinterfaceWSDDServiceName());
                 return _stub;
             }
         }
@@ -94,8 +94,8 @@ public class SOAPSearchServiceLocator extends org.apache.axis.client.Service imp
             return getPort(serviceEndpointInterface);
         }
         java.lang.String inputPortName = portName.getLocalPart();
-        if ("soapsearch".equals(inputPortName)) {
-            return getsoapsearch();
+        if ("dbinterface".equals(inputPortName)) {
+            return getdbinterface();
         }
         else  {
             java.rmi.Remote _stub = getPort(serviceEndpointInterface);
@@ -105,7 +105,7 @@ public class SOAPSearchServiceLocator extends org.apache.axis.client.Service imp
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://www.lsf.uni-due.de/lsf/services/soapsearch", "SOAPSearchService");
+        return new javax.xml.namespace.QName("https://campus.uni-due.de/lsf/services/dbinterface", "DBInterfaceService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class SOAPSearchServiceLocator extends org.apache.axis.client.Service imp
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://www.lsf.uni-due.de/lsf/services/soapsearch", "soapsearch"));
+            ports.add(new javax.xml.namespace.QName("https://campus.uni-due.de/lsf/services/dbinterface", "dbinterface"));
         }
         return ports.iterator();
     }
@@ -123,8 +123,8 @@ public class SOAPSearchServiceLocator extends org.apache.axis.client.Service imp
     */
     public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
         
-if ("soapsearch".equals(portName)) {
-            setsoapsearchEndpointAddress(address);
+if ("dbinterface".equals(portName)) {
+            setdbinterfaceEndpointAddress(address);
         }
         else 
 { // Unknown Port Name
