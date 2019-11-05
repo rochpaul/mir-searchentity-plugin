@@ -3,11 +3,11 @@
   <display-name>LsfProxyServlet</display-name>
   <name>LsfProxyServlet</name>
   <servlet>
-    <servlet-name>LsfProxyServlet</servlet-name>
-    <servlet-class>org.mycore.searchentity.plugin.servlets.LsfProxyServlet</servlet-class>
+    <servlet-name>LsfAutoCompleteServlet</servlet-name>
+    <servlet-class>org.mycore.searchentity.plugin.servlets.LsfAutoCompleteServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>LsfProxyServlet</servlet-name>
-    <url-pattern>/LsfProxyServlet</url-pattern>
+    <servlet-name>LsfAutoCompleteServlet</servlet-name>
+    <url-pattern>/LsfAutoCompleteServlet</url-pattern>
   </servlet-mapping>
 </web-fragment>

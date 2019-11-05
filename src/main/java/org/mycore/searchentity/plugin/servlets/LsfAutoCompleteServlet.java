@@ -6,11 +6,10 @@ import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.searchentity.plugin.soap.client.SOAPSearch;
 import org.mycore.searchentity.plugin.soap.client.SOAPSearchServiceLocator;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.rpc.ServiceException;
@@ -22,6 +21,7 @@ import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -66,28 +66,34 @@ public class LsfAutoCompleteServlet extends MCRServlet {
 
         String searchParam = (String) request.getParameter("searchParam");
         if (searchParam == null || searchParam.equals(""))
-            throw new ServletException("Invalid or non-existent lsfId parameter in SendXml servlet.");
+            throw new ServletException("Invalid or non-existent search parameter in LsfAutoCompleteServlet servlet.");
 
         HttpServletResponse response = job.getResponse();
 
-        ServletOutputStream stream = null;
-        BufferedInputStream buf = null;
+        PrintWriter autocompleteOut = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         JSONObject soapsearchData = null;
+        JSONObject autoCompleteObj = new JSONObject();
+
         String requestSoap = buildRequest(searchParam);
 
         try {
 
-            stream = response.getOutputStream();
-            response.setContentType("application/json");
-
             soapsearchData = XML.toJSONObject(soapsearch.search(requestSoap));
 
-            JSONArray resultObjects = soapsearchData.getJSONObject("result")
+            JSONObject resultList = soapsearchData.getJSONObject("result")
                 .getJSONObject("success")
-                .getJSONObject("list")
-                .getJSONArray("object");
+                .getJSONObject("list");
 
+            JSONArray resultObjects = new JSONArray();
+
+            try {
+                resultObjects = resultList.getJSONArray("object");
+            } catch (JSONException jsonException) {
+                resultObjects = resultObjects.put(resultList.getJSONObject("object"));
+            }
             int currentSize = resultObjects.length() <= maxSize ? resultObjects.length() : maxSize;
 
             LOGGER.info(
@@ -97,23 +103,38 @@ public class LsfAutoCompleteServlet extends MCRServlet {
             for (int ind = 0; ind < currentSize; ind++) {
 
                 JSONArray currentPersonMin = resultObjects.getJSONObject(ind).getJSONArray("attribute");
+                BigDecimal personIdentifier = null;
+                String personName = "";
 
                 for (int indPerson = 0; indPerson < currentPersonMin.length(); indPerson++) {
 
                     JSONObject currentPersonAttribute = currentPersonMin.getJSONObject(indPerson);
+
+                    if (currentPersonAttribute.getString("name").equals("ID")) {
+
+                        personIdentifier = currentPersonAttribute.getBigDecimal("value");
+                    }
+
+                    if (currentPersonAttribute.getString("name").equals("Nachname")) {
+
+                        personName = currentPersonAttribute.getString("value") + ", ";
+                    }
+
+                    if (currentPersonAttribute.getString("name").equals("Vorname")) {
+
+                        personName = personName + currentPersonAttribute.getString("value");
+                    }
                 }
+                autoCompleteObj.put(personName, personIdentifier);
             }
 
-        } catch (IOException ioe) {
+            autocompleteOut.print(autoCompleteObj.toString());
+            autocompleteOut.flush();
 
-            throw new ServletException(ioe.getMessage());
+        } catch (Exception exception) {
 
-        } finally {
+            throw new ServletException(exception.getMessage());
 
-            if (stream != null)
-                stream.close();
-            if (buf != null)
-                buf.close();
         }
     }
 
