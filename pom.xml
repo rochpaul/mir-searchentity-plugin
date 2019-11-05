@@ -109,16 +109,18 @@
       <version>1.6.3</version>
     </dependency>
 
+    <dependency>
+      <groupId>javax.xml.soap</groupId>
+      <artifactId>javax.xml.soap-api</artifactId>
+      <version>1.4.0</version>
+    </dependency>
+
     <!-- JSON -->
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20190722</version>
     </dependency>
-
-
-
-
 
     <dependency>
       <groupId>commons-lang</groupId>
@@ -141,4 +143,40 @@
       <artifactId>jdom2</artifactId>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>mirPluginPackageProfile</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>shade</goal>
+                </goals>
+                <configuration>
+                  <artifactSet>
+                    <includes>
+                      <include>org.apache.axis:axis</include>
+                      <include>org.apache.axis:axis-jaxrpc</include>
+                      <include>javax.xml.ws:jaxws-api</include>
+                      <include>xml-apis:xml-apis</include>
+                      <include>javax.xml.soap:javax.xml.soap-api</include>
+                      <include>commons-discovery:commons-discovery</include>
+                      <include>wsdl4j:wsdl4j</include>
+                      <include>org.json:json</include>
+                    </includes>
+                  </artifactSet>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
