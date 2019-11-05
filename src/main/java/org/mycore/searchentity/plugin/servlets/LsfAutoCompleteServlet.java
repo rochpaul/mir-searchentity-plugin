@@ -42,6 +42,11 @@ public class LsfAutoCompleteServlet extends MCRServlet {
      */
     private int maxsize;
 
+    /*
+     * Enable cors for the following hosts(if needed)
+     */
+    private String clientHosts;
+
     /* The client instance of LSF SOAPSearch web service */
     private SOAPSearch soapsearch;
 
@@ -57,9 +62,9 @@ public class LsfAutoCompleteServlet extends MCRServlet {
             String msg = "Could not locate HIS LSF WebService";
             throw new MCRException(msg, ex);
         }
-
         maxsize = MCRConfiguration2.getInt("mir-searchentity-plugin.lsf.autocomplete.maxsize").orElse(30);
 
+        clientHosts = MCRConfiguration2.getString("mir-searchentity-plugin.lsf.autocomplete.cors").orElse("");
     }
 
     @Override
@@ -74,8 +79,14 @@ public class LsfAutoCompleteServlet extends MCRServlet {
         HttpServletResponse response = job.getResponse();
 
         PrintWriter autocompleteOut = response.getWriter();
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
+        if (!clientHosts.isEmpty()) {
+            response.setHeader("Access-Control-Allow-Origin", clientHosts);
+            response.setHeader("Access-Control-Allow-Methods", "GET");
+        }
 
         JSONObject soapsearchData = null;
         JSONObject autoCompleteObj = new JSONObject();
