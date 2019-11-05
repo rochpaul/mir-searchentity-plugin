@@ -1,6 +1,7 @@
 package org.mycore.searchentity.plugin.servlets;
 
 import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.searchentity.plugin.soap.client.SOAPSearch;
@@ -39,7 +40,7 @@ public class LsfAutoCompleteServlet extends MCRServlet {
     /*
      * get maxSize via MCRConfiguration..
      */
-    private static final int maxSize = 30;
+    private int maxsize;
 
     /* The client instance of LSF SOAPSearch web service */
     private SOAPSearch soapsearch;
@@ -56,6 +57,8 @@ public class LsfAutoCompleteServlet extends MCRServlet {
             String msg = "Could not locate HIS LSF WebService";
             throw new MCRException(msg, ex);
         }
+
+        maxsize = MCRConfiguration2.getInt("mir-searchentity-plugin.lsf.autocomplete.maxsize").orElse(30);
 
     }
 
@@ -94,10 +97,11 @@ public class LsfAutoCompleteServlet extends MCRServlet {
             } catch (JSONException jsonException) {
                 resultObjects = resultObjects.put(resultList.getJSONObject("object"));
             }
-            int currentSize = resultObjects.length() <= maxSize ? resultObjects.length() : maxSize;
+            int currentSize = resultObjects.length() <= maxsize ? resultObjects.length() : maxsize;
 
             LOGGER.info(
-                "Found " + resultObjects.length() + " result object Entries for request " + requestSoap + ": First "
+                "Found " + resultObjects.length() + " result object Entries with soapsearch for searchParam "
+                    + searchParam + ": First "
                     + currentSize + " will be used for autocomplete");
 
             for (int ind = 0; ind < currentSize; ind++) {
@@ -112,7 +116,11 @@ public class LsfAutoCompleteServlet extends MCRServlet {
 
                     if (currentPersonAttribute.getString("name").equals("ID")) {
 
-                        personIdentifier = currentPersonAttribute.getBigDecimal("value");
+                        try {
+                            personIdentifier = currentPersonAttribute.getBigDecimal("value");
+                        } catch (JSONException jsonException) {
+                            // empty search on soap search
+                        }
                     }
 
                     if (currentPersonAttribute.getString("name").equals("Nachname")) {
@@ -125,7 +133,9 @@ public class LsfAutoCompleteServlet extends MCRServlet {
                         personName = personName + currentPersonAttribute.getString("value");
                     }
                 }
-                autoCompleteObj.put(personName, personIdentifier);
+                if (personIdentifier != null) {
+                    autoCompleteObj.put(personName, personIdentifier);
+                }
             }
 
             autocompleteOut.print(autoCompleteObj.toString());
